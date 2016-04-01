@@ -1,0 +1,158 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up Form</title>
+
+<link rel="stylesheet" href="mycss.css">
+<script src="jquery-1.11.0.min.js"></script>
+
+<!-- src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script> -->
+	
+
+<script>
+	function cidGenerator() {
+		var S4 = function() {
+			return (((1 + Math.random()) * 0x10000) | 0).toString(16)
+					.substring(1);
+		};
+		return (S4() + S4() + "-" + S4());
+	}
+
+	function myFunction() {
+		var n1 = cidGenerator();
+		document.getElementById("custID").value = n1;
+	}
+
+	$(document).ready(function() {
+		$("#submit").click(function() {
+
+			alert("hello inside function");
+
+			/* var user = new Object(); */
+
+			var user = {
+				customerID : $('#custID').val(),
+				title : $('#title').val(),
+				fName : $('#fname').val(),
+				lName : $('#lname').val(),
+				age : parseInt($('#age').val()),
+				city : $('#city').val(),
+				state : $('#state').val(),
+				country : $('#country').val(),
+				phone : parseInt($('#phone').val()),
+				email : $('#email').val(),
+				password : $('#password').val(),
+				addr1 : $('#addr1').val(),
+				addr2 : $('#addr2').val(),
+				pincode : parseInt($('#pincode').val())				
+			};
+
+			
+			/* document.write(JSON.stringify(user)); */			
+			alert("Customer ID: " + user.customerID);
+			
+			$.ajax({
+
+				type : "POST",
+				  contentType: "application/json; charset=utf-8",
+				  dataType:"text",
+				url : "http://localhost:8081/DemoSpringPOC/addUser",
+				data : JSON.stringify(user),
+				success : function(response) {
+					window.location = "http://localhost:8081/DemoSpringPOC_UI/Success.html";
+				},
+				error: function(jqXHR, exception) {
+					console.log("Console log: "+jqXHR.status);
+		            if (jqXHR.status === 0) {
+		                alert('Not connect.\n Verify Network.');
+		            } else if (jqXHR.status == 404) {
+		                alert('Requested page not found. [404]');
+		            } else if (jqXHR.status == 500) {
+		                alert('Internal Server Error [500].');
+		            } else if (exception === 'parsererror') {
+		                alert('Requested JSON parse failed.');
+		            } else if (exception === 'timeout') {
+		                alert('Time out error.');
+		            } else if (exception === 'abort') {
+		                alert('Ajax request aborted.');
+		            } else {
+		                alert('Uncaught Error.\n' + jqXHR.responseText);
+		            }
+		        }
+			});
+		});
+	});
+</script>
+
+
+<style>
+
+</style>
+
+
+</head>
+<body onload="myFunction()">
+
+	<h1>DemoSpring</h1>
+
+	<form>
+
+		<fieldset>
+			<legend>
+				<span class="number">></span> Registration
+			</legend>
+
+			<label for="custID">Customer ID:</label> 
+			<input type="text"
+				id="custID" name="custID" required="required" autocomplete="off"
+				disabled /> 
+				
+				<label for="job">Title:</label> <select id="title"
+				name="title" required="required">
+				<option value="mr">Mr.</option>
+				<option value="mrs">Mrs.</option>
+			</select> <label for="fname">First Name:</label> <input type="text" id="fname"
+				name="user_fname" required="required" placeholder="e.g.: Ayush">
+
+			<label for="lname">Last Name:</label> <input type="text" id="lname"
+				name="user_lname" required="required" placeholder="e.g.: Indani">
+
+			<label for="addr2">Address Line 1:</label> <input type="text"
+				id="addr1" name="addr1" required="required"
+				placeholder="e.g.: 10-A Mycampus, Myzone"> <label
+				for="addr1">Address Line 2:</label> <input type="text" id="addr2"
+				name="addr2" required="required"
+				placeholder="e.g.: Street 10, Near House 11"> <label
+				for="phone">Phone:</label> <input type="text" id="phone"
+				name="phone" required="required" pattern="[789][0-9]{9}"
+				placeholder="e.g.: 9845562225" maxlength="10"> <label for="age">Age:</label>
+			<input type="number" id="age" value="" name="age" maxlength="2" placeholder="e.g. 25" required="required">
+
+			<label for="city">City:</label> <input type="text" id="city"
+				name="city" required="required" placeholder="e.g. Pune"> <label
+				for="state">State:</label> <input type="text" id="state"
+				name="state" required="required" placeholder="e.g. Maharashtra">
+
+			<label for="country">Country:</label> <input type="text" id="country"
+				name="country" required="required" placeholder="e.g. India" >
+
+			<label for="pincode">Pincode:</label> <input type="number" id="pincode" value=""
+				name="pincode" min="100000" max="999999" maxlength="6" placeholder="e.g. 752018" required="required">
+
+			<label for="mail">Email:</label> <input type="email" id="email"
+				name="user_email" placeholder="e.g. example@xyz.com" required="required"> <label
+				for="password">Password:</label> <input type="password"
+				id="password" name="user_password" placeholder="e.g. @Xyhl23#aj89" required="required">
+
+
+			<button type="button" id="submit">Sign Up</button>
+			<button type="reset">Reset All</button>
+		</fieldset>
+
+	</form>
+
+
+
+</body>
+</html>
